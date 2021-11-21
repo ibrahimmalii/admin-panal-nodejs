@@ -6,24 +6,31 @@ const chalk = require('chalk');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv')
 const cors = require('cors')
-const path = require('path')
+const paypal = require('paypal-rest-sdk');
 
 dotenv.config()
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
+
+// About paypal
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': process.env.CLIENT_ID,
+  'client_secret': process.env.SECRET_KEY
+});
 
 
-
-var dir = path.join(__dirname, 'public');
-
-app.use(express.static(dir));
-
+app.get('/', (req, res) => res.sendFile(__dirname + "/index.html"));
 
 
 
 //============================================== import routes =================================//
 const authRouter = require('./routes/auth')
 const userRoute = require('./routes/user')
-const mediciceRouter = require('./routes/medicen')
+const bookRoute = require('./routes/book')
+const categoryRouter = require('./routes/category')
+const commentRouter = require('./routes/comment')
+const stripeRouter = require('./routes/stripe')
+const paypalRouter = require('./routes/paypal')
 
 
 
@@ -33,17 +40,11 @@ app.use(express.json())
 app.use(bodyParser())
 app.use('/api/auth', authRouter)
 app.use('/api/users', userRoute)
-app.use('/api/medicine', mediciceRouter)
-
-const multer = require('multer')
-const upload = multer({
-    dest: 'images'
-})
-
-app.post('/upload', upload.single('image'), (req, res)=>{
-    console.log(req.file)
-    res.send()
-})  
+app.use('/api/books', bookRoute)
+app.use('/api/categories', categoryRouter)
+app.use('/api/comments', commentRouter)
+app.use('/api/payment', stripeRouter)
+app.use(paypalRouter)
 
 
 

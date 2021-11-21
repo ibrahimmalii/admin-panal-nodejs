@@ -1,0 +1,32 @@
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+const cartSchema = new Schema({
+    userId: {
+        type: string,
+        required: true
+    },
+    books: [{
+        bookId: {
+            type: String
+        },
+        quantity: {
+            type: Number,
+            default: 1
+        }
+    }],
+    amout: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String,
+        default: 'pending'
+    },
+    address: {
+        type: Object,
+        required: true
+    }
+},{
+    timestamps: true
+})
