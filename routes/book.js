@@ -101,7 +101,7 @@ router.put('/update/admin/:id', async (req, res) => {
 
     // To check if value in valid values for updates
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['description']
+    const allowedUpdates = ['title', 'author', 'description', 'rate', 'price', 'amount', 'description']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).json({ error: 'error value for updates' })
